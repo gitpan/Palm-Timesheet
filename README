@@ -1,0 +1,86 @@
+NAME
+    Palm::Timesheet - Handler for Timesheet1.5.3 databases.
+
+VERSION
+    This document refers to version 0.1 of Palm::Timesheet, released Tue Oct
+    30 2001.
+
+SYNOPSIS
+            use Palm::Timesheet;
+
+            my $ts = Palm::Timesheet->new( file => $filename );
+            my $clients     = $ts->get_clients;
+            my $projects    = $ts->get_projects;
+            my $tasks       = $ts->get_tasks;  
+
+            while ( my $d = $ts->get_days->each ) {
+            while ( my $e = $d->each ) {
+                            print join( ";", (      
+                                    $d->get_day,
+                        $clients->get_record($e->get_client),
+                        $projects->get_record($e->get_project),
+                        $tasks->get_record($e->get_task),
+                        sprintf("%02d:%02d", $e->get_hour, $e->get_min ),
+                        ($e->get_chargeable)?"Y":" ",
+                                            $e->get_comment
+                            )) . "\n";
+            }
+            }           
+
+DESCRIPTION
+    The Timesheet PDB handler is a class that parses Timesheet1.5.3
+    databases. Timesheet1.5.3 is created by Stuart Nicholson
+    <snic@ihug.co.nz>.
+
+    It can be used to read and write Timesheet databases.
+
+  Overview
+
+    The Palm::Timesheet class parses a Timesheet PDB and collects the data
+    contained in a set of objects. A timesheet entry consists of a client ,
+    project, task, date, duration (hour and minutes) a comment and if the
+    entry is chargeable or not.
+
+  Constructor and Initialization
+
+    For the moment one constructor is available, it takes an existing PDB as
+    a parameter and parses the database.
+
+            my $ts = Palm::Timesheet->new( -file => $filename );
+
+  Class and other object methods
+
+    write
+                # Write to filename
+                $ts->write( $filename );
+
+                # Rewrite, using constructor filename.
+                $ts->write
+
+    get_days
+        Returns a Palm::Timesheet::DayRecordList
+
+    get_preferences
+        Returns a Palm::Timesheet::PreferenceRecord
+
+    get_clients
+        Returns a Palm::Timesheet::ClientRecordList
+
+    get_projects
+        Returns a Palm::Timesheet::ProjectRecordList
+
+    get_tasks
+        Returns a Palm::Timesheet::TaskRecordList
+
+BUGS
+    Probably a few ... but it works for now. PDB writing has *not* been
+    thoroughly tested.
+
+AUTHOR
+    Johan Van den Brande <johan@vandenbrande.com>
+
+COPYRIGHT
+    Copyright (c) 2001, Johan Van den Brande. All Rights Reserved. This
+    module is free software. It may be used, redistributed and/or modified
+    under the same terms as Perl itself.
+

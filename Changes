@@ -1,0 +1,6 @@
+Revision history for Perl extension Palm.
+
+0.01  Tue Oct  2 17:37:53 2001
+	- original version; created by h2xs 1.21 with options
+		-AX -n Palm
+
